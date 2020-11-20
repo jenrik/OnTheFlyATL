@@ -38,7 +38,7 @@ pub enum DeclKind {
 /// template (if such declaration exists) or the global scope.
 #[derive(Debug, Eq, PartialEq)]
 pub struct OwnedIdentifier {
-    /// The owner of the declaration, i.e. the name in from of the dot in "`p1.health`".
+    /// The owner of the declaration, i.e. the name in front of the dot in "`p1.health`".
     /// None implies that the owner is the current template or global
     pub owner: Option<String>,
     pub name: String,
@@ -139,7 +139,7 @@ pub struct TypeRange {
 
 /// A transition declaration defines what actions a player can take.
 /// If the condition is not satisfied, then the player cannot take the action in the
-/// current state. Transitions in a CGS is the combination of all
+/// current state. Transitions in a concurrent game structure is the combination of all
 /// players' actions. Each player must have at least one action available to them.
 #[derive(Debug, Eq, PartialEq)]
 pub struct TransitionDecl {
@@ -158,7 +158,6 @@ pub struct Expr {
 pub enum ExprKind {
     Number(i32),
     OwnedIdent(Rc<OwnedIdentifier>),
-    Negation(Rc<Expr>),
     UnaryOp(UnaryOpKind, Rc<Expr>),
     BinaryOp(BinaryOpKind, Rc<Expr>, Rc<Expr>),
     TernaryIf(Rc<Expr>, Rc<Expr>, Rc<Expr>),
@@ -167,7 +166,7 @@ pub enum ExprKind {
 /// Unary operators
 #[derive(Debug, Eq, PartialEq)]
 pub enum UnaryOpKind {
-    LogicalNegation,
+    Not,
     Negation, // eg -4
 }
 
@@ -190,17 +189,26 @@ pub enum BinaryOpKind {
     Implication,
 }
 
-// TODO Binary operators consisting of multiple characters, e.g. "==" or "&&"
-impl From<u8> for BinaryOpKind {
-    fn from(op: u8) -> BinaryOpKind {
+impl From<&[u8]> for BinaryOpKind {
+    fn from(op: &[u8]) -> BinaryOpKind {
         match op {
-            b'+' => Addition,
-            b'*' => Multiplication,
-            b'-' => Subtraction,
-            b'/' => Division,
+            b"+" => Addition,
+            b"*" => Multiplication,
+            b"-" => Subtraction,
+            b"/" => Division,
+            b"==" => Equality,
+            b"!=" => Inequality,
+            b">" => GreaterThan,
+            b"<" => LessThan,
+            b">=" => GreaterOrEqual,
+            b"<=" => LessOrEqual,
+            b"&&" => And,
+            b"||" => Or,
+            b"^" => Xor,
+            b"->" => Implication,
             _ => unimplemented!(
                 "Unrecognized operator '{}'. See 'impl From<u8> for BinaryOpKind' clause.",
-                op
+                String::from_utf8(op.to_vec()).unwrap()
             ),
         }
     }
