@@ -1,0 +1,7 @@
+player p = process;
+
+label always_true = 1;
+
+template process
+	[act] 1;
+endtemplate
