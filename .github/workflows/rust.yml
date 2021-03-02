@@ -19,7 +19,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --all-features
+          args: --all-features --quiet
 
   test:
     name: Test Suite
@@ -34,7 +34,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --all-features
+          args: --all-features --quiet
 
   fmt:
     name: Rustfmt
@@ -50,7 +50,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: --all -- --check
+          args: --all --quiet -- --check
 
   clippy:
     name: Clippy
