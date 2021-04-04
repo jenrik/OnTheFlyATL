@@ -63,8 +63,12 @@ pub fn distributed_certain_zero<
 }
 
 #[derive(Debug)]
-struct Worker<B: Broker<V> + Debug, G: ExtendedDependencyGraph<V>, V: Vertex, S: SearchStrategy<V>>
-{
+pub struct Worker<
+    B: Broker<V> + Debug,
+    G: ExtendedDependencyGraph<V>,
+    V: Vertex,
+    S: SearchStrategy<V>,
+> {
     id: WorkerId,
     /// Number of workers working on solving the query. This is used as part of the static allocation scheme, see `crate::Worker::vertex_owner`.
     worker_count: u64,
