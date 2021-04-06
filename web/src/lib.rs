@@ -9,6 +9,8 @@ use atl_checker::lcgs::ast::DeclKind;
 use atl_checker::lcgs::ir::intermediate::IntermediateLCGS;
 use atl_checker::lcgs::ir::symbol_table::Owner;
 use atl_checker::lcgs::parse::parse_lcgs;
+use atl_checker::search_strategy::bfs::BreadthFirstSearchBuilder;
+use atl_checker::search_strategy::SearchStrategyBuilder;
 use std::error::Error;
 use std::sync::Arc;
 use wasm_bindgen::prelude::*;
@@ -89,7 +91,14 @@ pub fn check(lcgs_model: &str, atl_formula: &str) -> Result<JsValue, JsValue> {
 
     let broker = crate::broker::SimpleBroker::new();
 
-    let mut worker = atl_checker::edg::Worker::new(0, 1, v0.clone(), broker.clone(), graph);
+    let mut worker = atl_checker::edg::Worker::new(
+        0,
+        1,
+        v0.clone(),
+        broker.clone(),
+        graph,
+        BreadthFirstSearchBuilder.build(),
+    );
     worker.run();
 
     match broker.get_result() {
