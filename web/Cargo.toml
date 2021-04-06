@@ -30,10 +30,6 @@ console_log = "0.2.0"
 
 atl-checker = { path = "../atl-checker", version = "0.1.0"}
 
-# The `web-sys` crate allows you to interact with the various browser APIs,
-# like the DOM.
-web-sys = { version = "0.3.22", features = ["console"] }
-
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
 # all the `std::fmt` and `std::panicking` infrastructure, so it's only enabled
@@ -43,6 +39,21 @@ console_error_panic_hook = "0.1.5"
 
 tracing = "0.1"
 tracing-wasm = "0.2.0"
+
+# The `web-sys` crate allows you to interact with the various browser APIs,
+# like the DOM.
+[dependencies.web-sys]
+version = "0.3.22"
+features = [
+    "console",
+    "Document",
+    "Element",
+    "Window",
+    "HtmlTextAreaElement",
+    "HtmlInputElement",
+    "HtmlButtonElement",
+    "HtmlDivElement",
+]
 
 # These crates are used for running unit tests.
 [dev-dependencies]
